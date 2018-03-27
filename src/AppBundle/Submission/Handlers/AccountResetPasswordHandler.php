@@ -82,6 +82,7 @@ class AccountResetPasswordHandler implements SubmissionHandlerInterface
      */
     public function save()
     {
+var_dump(__method__);
         $this->accountModel->save();
         // Log the customer in.
         $this->identityManager->login($this->accountModel);

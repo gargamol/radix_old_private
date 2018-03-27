@@ -35,6 +35,7 @@ class AccountEmailFactory extends AbstractModelFactory implements SubscriberFact
      */
     public function __construct(Store $store, EmailVerifyTokenGenerator $tokenGenerator, AuthSchema $authSchema)
     {
+var_dump(__method__);
         parent::__construct($store);
         $this->tokenGenerator = $tokenGenerator;
         $this->authSchema     = $authSchema;
@@ -45,6 +46,7 @@ class AccountEmailFactory extends AbstractModelFactory implements SubscriberFact
      */
     public function canSave(AbstractModel $email)
     {
+var_dump(__method__);
         $this->preValidate($email);
 
         if (null === $email->get('account')) {
@@ -89,6 +91,7 @@ class AccountEmailFactory extends AbstractModelFactory implements SubscriberFact
      */
     public function create(Model $account, $value, $isPrimary = false)
     {
+var_dump(__method__);
         $email = $this->getStore()->create('identity-account-email');
 
         $email->set('value', $value);
@@ -104,6 +107,7 @@ class AccountEmailFactory extends AbstractModelFactory implements SubscriberFact
      */
     public function postSave(Model $model)
     {
+var_dump(__method__);
     }
 
     /**
@@ -111,6 +115,7 @@ class AccountEmailFactory extends AbstractModelFactory implements SubscriberFact
      */
     public function postValidate(AbstractModel $email)
     {
+var_dump(__method__);
         // Generate and set the JWT token for non-verified emails.
         $verification = $email->get('verification');
         if (false === $verification->get('verified') && null === $verification->get('token')) {
@@ -159,6 +164,7 @@ class AccountEmailFactory extends AbstractModelFactory implements SubscriberFact
      */
     public function preValidate(AbstractModel $email)
     {
+var_dump(__method__);
         $this->formatEmailAddress($email);
 
         if (null === $email->get('verification')) {
@@ -176,6 +182,7 @@ class AccountEmailFactory extends AbstractModelFactory implements SubscriberFact
      */
     public function retrieveCustomerViaEmailAddress($emailAddress, $emailId = null)
     {
+var_dump(__method__);
         // Try email address
         $criteria = [
             'value'    => ModelUtility::formatEmailAddress($emailAddress),
@@ -197,6 +204,10 @@ class AccountEmailFactory extends AbstractModelFactory implements SubscriberFact
      */
     public function supports(Model $model)
     {
+var_dump(__method__);
+var_dump(__method__);
+var_dump('does it');
+var_dump($model->getType());
         return 'identity-account-email' === $model->getType();
     }
 
@@ -207,6 +218,7 @@ class AccountEmailFactory extends AbstractModelFactory implements SubscriberFact
      */
     private function formatEmailAddress(Model $email)
     {
+var_dump(__method__);
         $value = ModelUtility::formatEmailAddress($email->get('value'));
         $value = (empty($value)) ? null : $value;
         $email->set('value', $value);
@@ -215,8 +227,10 @@ class AccountEmailFactory extends AbstractModelFactory implements SubscriberFact
     /**
      * @param   Model   $email
      */
-    private function setDefaultVerification(Model $email)
+    
+private function setDefaultVerification(Model $email)
     {
+var_dump(__method__);
         $verification = $email->createEmbedFor('verification');
         $verification->set('verified', false);
         $email->set('verification', $verification);

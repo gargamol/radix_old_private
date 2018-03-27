@@ -33,6 +33,7 @@ class AccountCredentialsFactory extends AbstractEmbedFactory
      */
     public function __construct(Store $store, AccountCredentialPasswordFactory $password, AccountCredentialSocialFactory $social)
     {
+//var_dump(__method__);
         parent::__construct($store);
         $this->password = $password;
         $this->social   = $social;
@@ -49,6 +50,7 @@ class AccountCredentialsFactory extends AbstractEmbedFactory
      */
     public function applyPasswordCredential(Embed $credentials, $clearPassword, $mechanism = 'platform', $username = null)
     {
+var_dump(__method__);
         if (false === $this->supportsEmbed($credentials)) {
             $this->getUnsupportedError()->throwException();
         }
@@ -70,6 +72,7 @@ class AccountCredentialsFactory extends AbstractEmbedFactory
      */
     public function canSave(AbstractModel $credentials)
     {
+var_dump(__method__);
         if (false === $this->supportsEmbed($credentials)) {
             // Ensure this is the correct embed model.
             return $this->getUnsupportedError();
@@ -91,6 +94,7 @@ class AccountCredentialsFactory extends AbstractEmbedFactory
      */
     public function getPasswordFactory()
     {
+var_dump(__method__);
         return $this->password;
     }
 
@@ -99,6 +103,7 @@ class AccountCredentialsFactory extends AbstractEmbedFactory
      */
     public function getSocialFactory()
     {
+var_dump(__method__);
         return $this->social;
     }
 
@@ -107,6 +112,7 @@ class AccountCredentialsFactory extends AbstractEmbedFactory
      */
     public function postValidate(AbstractModel $credentials)
     {
+var_dump(__method__);
         if (null !== $password = $credentials->get('password')) {
             $this->getPasswordFactory()->postValidate($password);
         }
@@ -117,6 +123,7 @@ class AccountCredentialsFactory extends AbstractEmbedFactory
      */
     public function preValidate(AbstractModel $credentials)
     {
+var_dump(__method__);
         if (null !== $password = $credentials->get('password')) {
             $this->getPasswordFactory()->preValidate($password);
         }
@@ -127,6 +134,7 @@ class AccountCredentialsFactory extends AbstractEmbedFactory
      */
     protected function getSupportsType()
     {
+var_dump(__method__);
         return 'identity-account-credentials';
     }
 }

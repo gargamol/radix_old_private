@@ -56,6 +56,7 @@ class GatedDownloadHandler implements SubmissionHandlerInterface
      */
     public function save()
     {
+//var_dump(__method__);
     }
 
     /**
@@ -72,7 +73,7 @@ class GatedDownloadHandler implements SubmissionHandlerInterface
     {
         $email = $account->get('primaryEmail');
         if (empty($email)) {
-            throw new HttpFriendlyException('The email address field is required.', 400);
+            throw new HttpFriendlyException('2The email address field is required.', 400);
         }
     }
 
@@ -83,10 +84,10 @@ class GatedDownloadHandler implements SubmissionHandlerInterface
     {
         $email = ModelUtility::formatEmailAddress($payload->getIdentity()->get('primaryEmail'));
         if (empty($email)) {
-            throw new HttpFriendlyException('The email address field is required.', 400);
+            throw new HttpFriendlyException('1The email address field is required.', 400);
         }
         if (false === ModelUtility::isEmailAddressValid($email)) {
-            throw new HttpFriendlyException('The provided email address is invalid.', 400);
+            throw new HttpFriendlyException('1The provided email address is invalid.', 400);
         }
     }
 }

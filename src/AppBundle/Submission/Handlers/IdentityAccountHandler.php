@@ -52,8 +52,12 @@ class IdentityAccountHandler implements IdentifiableSubmissionHandlerInterface
      */
     public function createIdentityFor(RequestPayload $payload)
     {
+        var_dump(__method__);
+
         // Reset any previous.
         $this->newAccount = null;
+
+var_dump('use accountFactory->create with payload to create them');
 
         // Create the new account and override the identity set by the manager.
         $this->newAccount = $this->accountFactory->create($payload->getIdentity()->all());
@@ -86,6 +90,7 @@ class IdentityAccountHandler implements IdentifiableSubmissionHandlerInterface
      */
     public function save()
     {
+var_dump(__method__);
         $this->accountFactory->save($this->newAccount);
     }
 

@@ -87,6 +87,7 @@ class AccountEmailVerifyGenerateHandler implements SubmissionHandlerInterface
      */
     public function save()
     {
+var_dump(__method__);
         $this->emailModel->save();
     }
 

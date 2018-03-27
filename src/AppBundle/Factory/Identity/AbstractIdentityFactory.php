@@ -41,6 +41,7 @@ abstract class AbstractIdentityFactory extends AbstractModelFactory implements S
      */
     public function __construct(Store $store, IdentityAddressFactory $address, IdentityPhoneFactory $phone, IdentityAnswerFactory $answer)
     {
+//var_dump(__method__);
         parent::__construct($store);
         $this->address = $address;
         $this->phone   = $phone;
@@ -55,6 +56,7 @@ abstract class AbstractIdentityFactory extends AbstractModelFactory implements S
      */
     public function apply(Model $identity, array $attributes = [])
     {
+var_dump(__method__);
         $metadata = $identity->getMetadata();
         foreach ($attributes as $key => $value) {
             if (true === $metadata->hasAttribute($key)) {
@@ -72,6 +74,7 @@ abstract class AbstractIdentityFactory extends AbstractModelFactory implements S
      */
     public function canSave(AbstractModel $identity)
     {
+var_dump(__method__);
         $this->preValidate($identity);
         foreach ($identity->get('addresses') as $address) {
             if (true !== $result = $this->getAddressFactory()->canSave($address)) {
@@ -104,9 +107,16 @@ abstract class AbstractIdentityFactory extends AbstractModelFactory implements S
      */
     public function create(array $attributes = [])
     {
+var_dump(__method__);
+var_dump('create empty identity instance');
         $identity = $this->createEmptyInstance();
+var_dump('set deleted');
         $identity->set('deleted', false);
+var_dump('now apply all attributes');
+var_dump($attributes);
         $this->apply($identity, $attributes);
+var_dump('return the created identity');
+var_dump($identity->geId());
         return $identity;
     }
 
@@ -117,6 +127,7 @@ abstract class AbstractIdentityFactory extends AbstractModelFactory implements S
      */
     public function getAddressFactory()
     {
+var_dump(__method__);
         return $this->address;
     }
 
@@ -127,6 +138,7 @@ abstract class AbstractIdentityFactory extends AbstractModelFactory implements S
      */
     public function getAnswerFactory()
     {
+var_dump(__method__);
         return $this->answer;
     }
 
@@ -137,6 +149,7 @@ abstract class AbstractIdentityFactory extends AbstractModelFactory implements S
      */
     public function getPhoneFactory()
     {
+var_dump(__method__);
         return $this->phone;
     }
 
@@ -148,6 +161,7 @@ abstract class AbstractIdentityFactory extends AbstractModelFactory implements S
      */
     public function getRelatedModelsFor(Model $identity)
     {
+var_dump(__method__);
         return array_merge([$identity], $this->getRelatedAnswers($identity));
     }
 
@@ -156,6 +170,7 @@ abstract class AbstractIdentityFactory extends AbstractModelFactory implements S
      */
     public function preValidate(AbstractModel $identity)
     {
+var_dump(__method__);
     }
 
     /**
@@ -163,6 +178,7 @@ abstract class AbstractIdentityFactory extends AbstractModelFactory implements S
      */
     public function postSave(Model $model)
     {
+var_dump(__method__);
     }
 
     /**
@@ -170,6 +186,7 @@ abstract class AbstractIdentityFactory extends AbstractModelFactory implements S
      */
     public function postValidate(AbstractModel $identity)
     {
+var_dump(__method__);
         foreach ($identity->get('addresses') as $address) {
             $this->getAddressFactory()->postValidate($address);
         }
@@ -185,11 +202,17 @@ abstract class AbstractIdentityFactory extends AbstractModelFactory implements S
      */
     public function save(Model $identity)
     {
+var_dump(__method__);
         if (true !== $result = $this->canSave($identity)) {
+var_dump('throw exception1 cannot save');
             $result->throwException();
         }
+var_dump('loop and save');
         foreach ($this->getRelatedModelsFor($identity) as $model) {
+var_dump('looping');
+//var_dump($model->getCollection());
             $model->save();
+var_dump('saved one');
         }
     }
 
@@ -215,6 +238,7 @@ abstract class AbstractIdentityFactory extends AbstractModelFactory implements S
      */
     protected function createEmptyInstance()
     {
+var_dump(__method__);
         return $this->getStore()->create($this->getSupportsType());
     }
 
@@ -227,6 +251,7 @@ abstract class AbstractIdentityFactory extends AbstractModelFactory implements S
      */
     protected function getRelatedAnswers(Model $identity)
     {
+var_dump(__method__);
         $answers = [];
         foreach ($this->getStore()->getModelCache()->getAll() as $type => $models) {
             if (0 !== stripos($type, 'identity-answer-')) {
@@ -288,6 +313,7 @@ abstract class AbstractIdentityFactory extends AbstractModelFactory implements S
      */
     private function setPrimaryAddress(Model $identity, array $attributes)
     {
+var_dump(__method__);
         if (false === HelperUtility::isSetArray($attributes, 'primaryAddress')) {
             return;
         }

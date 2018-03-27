@@ -17,6 +17,7 @@ class AccountCredentialSocialFactory extends AbstractEmbedFactory
      */
     public function canSave(AbstractModel $credentials)
     {
+var_dump(__method__);
         return true;
     }
 

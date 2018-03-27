@@ -323,44 +323,65 @@ class IdentityManager
      */
     public function upsertIdentitiesFor($emailAddress, array $attributes = [])
     {
+var_dump(__method__);
         $emailAddress = ModelUtility::formatEmailAddress($emailAddress);
 
+var_dump('format email address: '.$emailAddress);
+
         if (empty($emailAddress)) {
+
+var_dump('no email address provided - get active identity');
+
             // No email address provided.
             $identity = $this->getActiveIdentity();
             if (null === $identity) {
+var_dump('no active identity - create a new one, and return it');
                 // No active identity. Create new.
                 return [$this->getIdentityFactoryFor('identity-internal')->create($attributes)];
             }
 
+var_dump('see if we can update the identity');
+
             // Determine if this can update the identity.
             $session = $this->cookieManager->getSessionCookie();
             if (null !== $session && $session->getIdentifier() === $identity->getId()) {
+var_dump('session found');
                 if ('identity-internal' === $identity->getType()) {
+var_dump('is identity internal - apply update');
                     // Internal identity. Update
                     $this->getIdentityFactoryFor('identity-internal')->apply($identity, $attributes);
+var_dump('return identity');
                     return [$identity];
                 } else {
+var_dump('not internal identity so do nothing');
                     // @todo This could clone the current external identity and apply...
                     return [];
                 }
             }
+var_dump('no session found so do nothing');
             return [];
         }
+
+var_dump('email address was found - search for possible internal identities');
 
         // Email address was provided. Find all possible internal identities.
         $collection = $this->getStore()->findQuery('identity-internal', ['emails.value' => $emailAddress]);
         if (true === $collection->isEmpty()) {
+var_dump('no internal-identity found2 - create one and return it');
             // No identities found. Create.
             return [$this->getIdentityFactoryFor('identity-internal')->create($attributes)];
         }
 
+var_dump('identities found - upsert all of them');
+
         // Identities found. Upsert each one.
         $identities = [];
         foreach ($collection as $identity) {
+var_dump('upserting an identity with new data');
             $this->getIdentityFactoryFor('identity-internal')->apply($identity, $attributes);
             $identities[] = $identity;
         }
+var_dump('returning all matching and updated identities');
         return $identities;
     }
 

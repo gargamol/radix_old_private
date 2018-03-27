@@ -129,6 +129,7 @@ class AccountResetPasswordGenerateHandler implements SubmissionHandlerInterface
      */
     public function save()
     {
+var_dump(__method__);
         $this->accountModel->save();
     }
 

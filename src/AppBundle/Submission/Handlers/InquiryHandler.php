@@ -53,7 +53,7 @@ class InquiryHandler implements SubmissionHandlerInterface
      */
     public function save()
     {
-
+var_dump(__method__);
     }
 
     /**

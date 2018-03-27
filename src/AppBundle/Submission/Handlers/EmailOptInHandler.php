@@ -74,6 +74,7 @@ class EmailOptInHandler implements SubmissionHandlerInterface
      */
     public function save()
     {
+var_dump(__method__);
         foreach ($this->optInModels as $optIn) {
             $optIn->save();
         }

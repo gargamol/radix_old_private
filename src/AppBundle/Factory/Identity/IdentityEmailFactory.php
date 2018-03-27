@@ -34,11 +34,11 @@ class IdentityEmailFactory extends AbstractEmbedFactory
         if (empty($value)) {
             // All embedded email addresses required a value.
             // If an outside form our source does NOT require an email address, measures should be taken to ensure the embedded email model is never created.
-            return new Error('The email address value is required.', 400);
+            return new Error(__method__.' -- The email address value is required.', 400);
         }
         if (false === ModelUtility::isEmailAddressValid($value)) {
             // Ensure email address is valid format.
-            return new Error(sprintf('The provided email address `%s` is invalid.', $value), 400);
+            return new Error(sprintf(__method__.' -- The provided email address `%s` is invalid.', $value), 400);
         }
         return true;
     }

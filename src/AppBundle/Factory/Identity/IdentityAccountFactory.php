@@ -36,6 +36,7 @@ class IdentityAccountFactory extends AbstractIdentityFactory
      */
     public function __construct(Store $store, IdentityAddressFactory $address, IdentityPhoneFactory $phone, IdentityAnswerFactory $answer, AccountCredentialsFactory $credentials, AccountEmailFactory $email)
     {
+//var_dump(__method__);
         parent::__construct($store, $address, $phone, $answer);
         $this->credentials = $credentials;
         $this->email       = $email;
@@ -43,6 +44,7 @@ class IdentityAccountFactory extends AbstractIdentityFactory
 
     public function apply(Model $identity, array $attributes = [])
     {
+var_dump(__method__);
         parent::apply($identity, $attributes);
         $this->setPrimaryEmail($identity, $attributes);
     }
@@ -52,6 +54,7 @@ class IdentityAccountFactory extends AbstractIdentityFactory
      */
     public function canSave(AbstractModel $identity)
     {
+var_dump(__method__);
         if (true !== $result = parent::canSave($identity)) {
             return $result;
         }
@@ -72,6 +75,7 @@ class IdentityAccountFactory extends AbstractIdentityFactory
      */
     public function create(array $attributes = [])
     {
+var_dump(__method__);
         // If account is awaiting verification, re-use.
         $identity = null;
         if (isset($attributes['primaryEmail'])) {
@@ -131,6 +135,7 @@ class IdentityAccountFactory extends AbstractIdentityFactory
      */
     public function getRelatedModelsFor(Model $identity)
     {
+var_dump(__method__);
         return array_merge(parent::getRelatedModelsFor($identity), $this->getRelatedEmails($identity));
     }
 
@@ -139,6 +144,7 @@ class IdentityAccountFactory extends AbstractIdentityFactory
      */
     public function postValidate(AbstractModel $identity)
     {
+var_dump(__method__);
         parent::postValidate($identity);
         $credentials = $identity->get('credentials');
 
@@ -157,6 +163,7 @@ class IdentityAccountFactory extends AbstractIdentityFactory
 
     private function updateRelatedPostsFor(AbstractModel $identity)
     {
+var_dump(__method__);
         $changeset = $identity->getChangeSet();
         $postUpdates = [];
         if ($identity->getState()->is('new')) {
@@ -189,6 +196,7 @@ class IdentityAccountFactory extends AbstractIdentityFactory
      */
     public function preValidate(AbstractModel $identity)
     {
+var_dump(__method__);
         parent::preValidate($identity);
         $this->appendSettings($identity);
     }
@@ -206,6 +214,7 @@ class IdentityAccountFactory extends AbstractIdentityFactory
      */
     private function appendSettings(Model $identity)
     {
+var_dump(__method__);
         $settings = $identity->get('settings');
         if (null === $settings) {
             $settings = $identity->createEmbedFor('settings');
@@ -225,6 +234,7 @@ class IdentityAccountFactory extends AbstractIdentityFactory
      */
     private function getRelatedEmails(Model $identity)
     {
+var_dump(__method__);
         $emails = [];
         foreach ($this->getStore()->getModelCache()->getAllForType('identity-account-email') as $email) {
             if (null === $email->get('account')) {
