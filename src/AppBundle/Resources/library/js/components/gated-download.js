@@ -22,6 +22,8 @@ React.createClass({ displayName: 'ComponentGatedDownload',
 
   componentDidMount: function() {
 
+console.log('gated_download.js - componentDidMount');
+
     this._loadForm('gated-download');
 
     EventDispatcher.subscribe('AccountManager.account.loaded', function() {
@@ -49,6 +51,8 @@ React.createClass({ displayName: 'ComponentGatedDownload',
   },
 
   _loadForm: function(key) {
+
+console.log('gated_download.js - loadForm');
     var locker = this._formLock;
     locker.lock();
 
@@ -68,6 +72,9 @@ React.createClass({ displayName: 'ComponentGatedDownload',
   },
 
   handleSubmit: function(event) {
+
+console.log('gated-download.js - handleSubmit');
+
     event.preventDefault();
 
     var formData = this.state.values;
@@ -115,6 +122,9 @@ React.createClass({ displayName: 'ComponentGatedDownload',
   },
 
   render: function() {
+
+console.log('gated_download.js - render');
+
     Debugger.log('ComponentGatedDownload', 'render()', this);
 
     var className = 'platform-element';
@@ -135,6 +145,8 @@ React.createClass({ displayName: 'ComponentGatedDownload',
   },
 
   _getForm: function() {
+
+console.log('gated_download.js - getForm');
     var form;
     if (this.state.loaded) {
       form = React.createElement('div', null,

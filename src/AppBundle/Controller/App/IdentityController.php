@@ -20,6 +20,7 @@ class IdentityController extends AbstractAppController
      */
     public function indexAction(Request $request)
     {
+var_dump(__method__);
         $manager    = $this->get('app_bundle.identity.manager');
         $serializer = $this->get('app_bundle.serializer.public_api');
         $identity   = $manager->getActiveIdentity();

@@ -8,6 +8,8 @@ use AppBundle\Utility\ModelUtility;
 use As3\Modlr\Models\AbstractModel;
 use As3\Modlr\Models\Model;
 use As3\Modlr\Store\Store;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Account factory.
@@ -36,7 +38,6 @@ class IdentityAccountFactory extends AbstractIdentityFactory
      */
     public function __construct(Store $store, IdentityAddressFactory $address, IdentityPhoneFactory $phone, IdentityAnswerFactory $answer, AccountCredentialsFactory $credentials, AccountEmailFactory $email)
     {
-//var_dump(__method__);
         parent::__construct($store, $address, $phone, $answer);
         $this->credentials = $credentials;
         $this->email       = $email;

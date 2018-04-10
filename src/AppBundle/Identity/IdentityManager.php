@@ -326,62 +326,69 @@ class IdentityManager
 var_dump(__method__);
         $emailAddress = ModelUtility::formatEmailAddress($emailAddress);
 
-var_dump('format email address: '.$emailAddress);
+var_dump(__method__.' - format email address: '.$emailAddress);
 
         if (empty($emailAddress)) {
 
-var_dump('no email address provided - get active identity');
+var_dump(__method__.' - no email address provided - get active identity');
 
             // No email address provided.
             $identity = $this->getActiveIdentity();
             if (null === $identity) {
-var_dump('no active identity - create a new one, and return it');
+var_dump(__method__.' - no active identity - create a new one, and return it');
                 // No active identity. Create new.
                 return [$this->getIdentityFactoryFor('identity-internal')->create($attributes)];
             }
 
-var_dump('see if we can update the identity');
+var_dump(__method__.' - see if we can update the identity');
 
             // Determine if this can update the identity.
             $session = $this->cookieManager->getSessionCookie();
             if (null !== $session && $session->getIdentifier() === $identity->getId()) {
-var_dump('session found');
+var_dump(__method__.' - session found');
                 if ('identity-internal' === $identity->getType()) {
-var_dump('is identity internal - apply update');
+var_dump(__method__.' - is identity internal - apply update');
                     // Internal identity. Update
                     $this->getIdentityFactoryFor('identity-internal')->apply($identity, $attributes);
-var_dump('return identity');
+var_dump(__method__.' - return identity');
                     return [$identity];
                 } else {
-var_dump('not internal identity so do nothing');
+var_dump(__method__.' - not internal identity so do nothing');
                     // @todo This could clone the current external identity and apply...
                     return [];
                 }
             }
-var_dump('no session found so do nothing');
+var_dump(__method__.' - no session found so do nothing');
             return [];
         }
 
-var_dump('email address was found - search for possible internal identities');
+var_dump(__method__.' - email address was found in payload - search for possible internal identities');
+
+$criteria = ['emails.value' => $emailAddress];
+var_dump($criteria);
 
         // Email address was provided. Find all possible internal identities.
         $collection = $this->getStore()->findQuery('identity-internal', ['emails.value' => $emailAddress]);
+//var_dump($collection);
+
         if (true === $collection->isEmpty()) {
-var_dump('no internal-identity found2 - create one and return it');
+var_dump(__method__.' - no internal-identity found2 - create one and return it');
             // No identities found. Create.
             return [$this->getIdentityFactoryFor('identity-internal')->create($attributes)];
         }
 
-var_dump('identities found - upsert all of them');
+var_dump(__method__.' - identities found (collection->isEmpty did not return true) - upsert all of them');
 
         // Identities found. Upsert each one.
         $identities = [];
         foreach ($collection as $identity) {
-var_dump('upserting an identity with new data');
+var_dump(__method__.' - upsert loop  an identity with new data - identityId:'.$identity->getId());
+//var_dump($identity->getId());
+//var_dump($attributes);
             $this->getIdentityFactoryFor('identity-internal')->apply($identity, $attributes);
             $identities[] = $identity;
         }
-var_dump('returning all matching and updated identities');
+var_dump(__method__.' - returning all matching and updated identities (should have seen upsert loop above here)');
         return $identities;
     }
 

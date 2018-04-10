@@ -27,6 +27,7 @@ class IdentityAccountHandler implements IdentifiableSubmissionHandlerInterface
      */
     public function __construct(IdentityAccountFactory $accountFactory)
     {
+var_dump(__method__);
         $this->accountFactory = $accountFactory;
     }
 
@@ -35,6 +36,7 @@ class IdentityAccountHandler implements IdentifiableSubmissionHandlerInterface
      */
     public function beforeSave(RequestPayload $payload, Model $submission)
     {
+var_dump(__method__);
     }
 
     /**
@@ -42,6 +44,7 @@ class IdentityAccountHandler implements IdentifiableSubmissionHandlerInterface
      */
     public function canSave()
     {
+var_dump(__method__);
         if (true !== $result = $this->accountFactory->canSave($this->newAccount)) {
             $result->throwException();
         }
@@ -57,7 +60,7 @@ class IdentityAccountHandler implements IdentifiableSubmissionHandlerInterface
         // Reset any previous.
         $this->newAccount = null;
 
-var_dump('use accountFactory->create with payload to create them');
+var_dump(__method__.' - use accountFactory->create with payload to create them');
 
         // Create the new account and override the identity set by the manager.
         $this->newAccount = $this->accountFactory->create($payload->getIdentity()->all());
@@ -99,6 +102,7 @@ var_dump(__method__);
      */
     public function validateAlways(RequestPayload $payload)
     {
+var_dump(__method__);
     }
 
     /**

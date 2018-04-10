@@ -32,11 +32,12 @@ class InputSubmissionFactory extends AbstractModelFactory implements SubscriberF
     /**
      * @var RequestStack
      */
-    private $requestStack;
+    public $requestStack;
 
 
     public function __construct(Store $store, InputAnswerFactory $answer, RequestStack $requestStack, MongoDBFormatter $formatter)
     {
+var_dump(__method__);
         parent::__construct($store);
         $this->answer       = $answer;
         $this->requestStack = $requestStack;
@@ -51,14 +52,19 @@ class InputSubmissionFactory extends AbstractModelFactory implements SubscriberF
      */
     public function apply(Model $submission, RequestPayload $payload)
     {
+var_dump(__method__);
         $submission->set('payload', $payload->toArray());
 
         $metadata = $submission->getMetadata();
+//var_dump($metadata);
+//var_dump($payload->getSubmission());
         foreach ($payload->getSubmission() as $key => $value) {
+var_dump('**************************************  key: '.$key);
             if (true === $metadata->hasAttribute($key)) {
                 $submission->set($key, $value);
             }
         }
+var_dump('done looping over submission key values now');
         $this->setAnswers($submission, $payload);
     }
 
@@ -95,6 +101,7 @@ class InputSubmissionFactory extends AbstractModelFactory implements SubscriberF
      */
     public function create(RequestPayload $payload)
     {
+var_dump(__method__);
         $submission = $this->getStore()->create('input-submission');
         $this->apply($submission, $payload);
         return $submission;
@@ -142,9 +149,15 @@ class InputSubmissionFactory extends AbstractModelFactory implements SubscriberF
      */
     public function postValidate(AbstractModel $submission)
     {
+var_dump('*********@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
+var_dump(__method__);
+
         // Ensure raw payload data is formatted (for date time / numbers / etc).
         $formatted = $this->formatter->formatRaw((array) $submission->get('payload'));
         $submission->set('payload', $formatted);
+
+//var_dump('current request');
+//var_dump($this->requestStack->getCurrentRequest());
 
         if (null !== $request = $this->requestStack->getCurrentRequest()) {
             // Append request specific items.
@@ -194,6 +207,7 @@ var_dump(__method__);
      */
     private function appendIpAddress(Model $model, Request $request)
     {
+var_dump(__method__);
         $ip = $request->getClientIp();
         if (IpAddressUtility::isIpVersion4($ip)) {
             $model->set('ipFour', $ip);
@@ -213,6 +227,7 @@ var_dump(__method__);
      */
     private function appendRequestDetails(Model $model, Request $request)
     {
+var_dump(__method__);
         $embed = $model->createEmbedFor('request');
         $embed
             ->set('host', $request->getHost())

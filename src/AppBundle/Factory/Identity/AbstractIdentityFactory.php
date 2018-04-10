@@ -10,6 +10,8 @@ use AppBundle\Utility\LocaleUtility;
 use As3\Modlr\Models\AbstractModel;
 use As3\Modlr\Models\Model;
 use As3\Modlr\Store\Store;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Abstract identity factory with common operations for both accounts and internal/external identities.
@@ -33,6 +35,9 @@ abstract class AbstractIdentityFactory extends AbstractModelFactory implements S
      */
     private $phone;
 
+    public $debug;
+
+
     /**
      * @param   Store                   $store
      * @param   IdentityAddressFactory  $address
@@ -41,7 +46,7 @@ abstract class AbstractIdentityFactory extends AbstractModelFactory implements S
      */
     public function __construct(Store $store, IdentityAddressFactory $address, IdentityPhoneFactory $phone, IdentityAnswerFactory $answer)
     {
-//var_dump(__method__);
+var_dump(__method__);
         parent::__construct($store);
         $this->address = $address;
         $this->phone   = $phone;
@@ -57,8 +62,10 @@ abstract class AbstractIdentityFactory extends AbstractModelFactory implements S
     public function apply(Model $identity, array $attributes = [])
     {
 var_dump(__method__);
+var_dump($attributes);
         $metadata = $identity->getMetadata();
         foreach ($attributes as $key => $value) {
+var_dump($key);
             if (true === $metadata->hasAttribute($key)) {
                 $identity->set($key, $value);
             }
@@ -108,15 +115,33 @@ var_dump(__method__);
     public function create(array $attributes = [])
     {
 var_dump(__method__);
-var_dump('create empty identity instance');
+var_dump(__method__.' - create empty identity instance');
         $identity = $this->createEmptyInstance();
-var_dump('set deleted');
+var_dump(__method__.' - set deleted');
         $identity->set('deleted', false);
-var_dump('now apply all attributes');
+var_dump(__method__.' - now apply all attributes');
 var_dump($attributes);
         $this->apply($identity, $attributes);
-var_dump('return the created identity');
-var_dump($identity->geId());
+
+$identity->set('debug', $attributes['debug']);
+
+var_dump('try to set ip address and request stuff');
+        var_dump('current request');
+
+
+/*
+            // Append request specific items.
+            $this->appendIpAddress($identity, $request);
+            $this->appendRequestDetails($identity, $request);
+        }
+
+var_dump($identity);
+*/
+
+
+
+var_dump(__method__.' - return the created identity -'.$identity->getId());
+//var_dump($identity->geId());
         return $identity;
     }
 
@@ -204,15 +229,15 @@ var_dump(__method__);
     {
 var_dump(__method__);
         if (true !== $result = $this->canSave($identity)) {
-var_dump('throw exception1 cannot save');
+var_dump(__method__.' - throw exception1 cannot save');
             $result->throwException();
         }
-var_dump('loop and save');
+var_dump(__method__.' - loop and save');
         foreach ($this->getRelatedModelsFor($identity) as $model) {
-var_dump('looping');
+var_dump(__method__.' - looping');
 //var_dump($model->getCollection());
             $model->save();
-var_dump('saved one');
+var_dump(__method__.' - saved one');
         }
     }
 
@@ -467,4 +492,43 @@ var_dump(__method__);
             }
         }
     }
+
+    /**
+     * @param   Model   $model
+     * @param   Request $request
+     */
+    private function appendIpAddress(Model $model, Request $request)
+    {
+var_dump(__method__);
+        $ip = $request->getClientIp();
+        if (IpAddressUtility::isIpVersion4($ip)) {
+            $model->set('ipFour', $ip);
+        }
+        if (IpAddressUtility::isIpVersion6($ip)) {
+            $model->set('ipSix', $ip);
+        }
+        $ipInfo = IpAddressUtility::geoCodeIp($ip);
+        if (!empty($ipInfo)) {
+            $model->set('ipInfo', $ipInfo);
+        }
+    }
+
+    /**
+     * @param   Model   $model
+     * @param   Request $request
+     */
+    private function appendRequestDetails(Model $model, Request $request)
+    {
+var_dump(__method__);
+        $embed = $model->createEmbedFor('request');
+        $embed
+            ->set('host', $request->getHost())
+            ->set('method', $request->getMethod())
+            ->set('path', $request->getPathInfo())
+            ->set('query', $request->getQueryString())
+            ->set('headers', (string) $request->headers)
+        ;
+        $model->set('request', $embed);
+    }
+
 }

@@ -205,9 +205,8 @@ var_dump(__method__);
     public function supports(Model $model)
     {
 var_dump(__method__);
-var_dump(__method__);
-var_dump('does it');
-var_dump($model->getType());
+var_dump(__method__.' - does this handler support this submission (basically is type identity-account-email) - '.$model->getType());
+//var_dump($model->getType());
         return 'identity-account-email' === $model->getType();
     }
 

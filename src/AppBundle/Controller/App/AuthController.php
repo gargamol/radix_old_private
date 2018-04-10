@@ -19,6 +19,7 @@ class AuthController extends AbstractAppController
      */
     public function retrieveAction(Request $request)
     {
+var_dump(__method__);
         $manager = $this->get('app_bundle.identity.manager');
         if (false === $manager->isAccountLoggedIn()) {
             // @todo This should be handled by the identify service.

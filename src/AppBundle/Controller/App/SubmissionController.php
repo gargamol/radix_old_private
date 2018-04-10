@@ -23,8 +23,16 @@ class SubmissionController extends AbstractAppController
      */
     public function indexAction($sourceKey, Request $request)
     {
+var_dump(__method__);
+var_dump(__method__. ' - '.$sourceKey);
+//var_dump($request);
+var_dump(__method__.' - get app_bundle.submission.manager');
         $manager = $this->get('app_bundle.submission.manager');
+//var_dump($manager);
+var_dump(__method__.' - got it now, set the payload up');
         $payload = RequestPayload::createFrom($request);
+//var_dump($payload);
+var_dump(__method__.' - payload done now process it all');
 
         return $manager->processFor($sourceKey, $payload);
     }
