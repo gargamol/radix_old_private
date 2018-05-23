@@ -31,6 +31,7 @@ class IdentityData extends Merrick
         $this->segments[] = new Segment\IdentityAnswerIndustry($this, $source);
 
         $this->segments[] = new Segment\IdentityOptIn($this, $source);
+        //$this->segments[] = new Segment\IdentityOptInFix($this, $source);
 
         // Input Answers
         $this->segments[] = new Segment\InputAnswerOmeda($this, $source);

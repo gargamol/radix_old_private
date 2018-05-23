@@ -41,15 +41,23 @@ class InputAnswerOmeda extends InputAnswer
      */
     protected function formatModel(array $doc)
     {
+        //var_dump('in formatMaodel');
         try {
+            //var_dump($doc['question']);
+            //var_dump('get question');
             $question = $this->retrieveQuestionId($doc['question']);
+            //var_dump('got question');
             if (null === $question) {
+                var_dump('question was null');
                 return;
             }
+            //var_dump('got question now get answer');
             $answer = $this->retrieveAnswerId($doc['answer']);
             if (null === $answer) {
+                var_dump('answer was null');
                 return;
             }
+            //var_dump('now return it');
             return [
                 'legacy'    => [
                     'id'            => (string) $doc['submission'],
@@ -63,7 +71,9 @@ class InputAnswerOmeda extends InputAnswer
                 'value'         => ['id' => $answer, 'type' => 'question-choice']
             ];
         } catch (\Exception $e) {
-            var_dump(__METHOD__, $e->getMessage(), __METHOD__);
+            //var_dump('catching it');
+            //var_dump(__METHOD__, $e->getMessage(), __METHOD__);
+            var_dump($e->getMessage());
         }
     }
 

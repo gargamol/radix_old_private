@@ -31,6 +31,8 @@ abstract class Platform extends Importer implements ImporterInterface
         'acbm:fcp'      => 'www.forconstructionpros.com',
         'cygnus:vspc'   => 'www.vehicleservicepros.com',
         'cygnus:ofcr'   => 'www.officer.com',
+        'acbm:sdce'     => 'www.sdcexec.com',
+        'acbm:fl'       => 'www.foodlogistics.com',
     ];
 
     /**

@@ -6,6 +6,10 @@ use AppBundle\Import\Segment\Merrick\IdentityData;
 
 abstract class InputAnswer extends IdentityData
 {
+
+    // @jpdev
+    public $missingAnswers = 0;
+
     /**
      * @var     array
      */
@@ -126,8 +130,22 @@ abstract class InputAnswer extends IdentityData
         }
         $legacyId = (string) $legacyId;
         if (!array_key_exists($legacyId, $this->questions)) {
+            //var_dump('question not in cache - looking in question collection with criteria');
+            //var_dump(sprintf('integration-omeda-%s', $legacyId));
             $question = $this->getCollectionForModel('question')->findOne(['key' => sprintf('integration-omeda-%s', $legacyId)]);
+
             if (null === $question) {
+                //var_dump('couldnt find question - strip cps_');
+                if (strlen($legacyId) > 3) {
+                    $legacyId = substr($legacyId, 4);
+                }
+                //var_dump($legacyId);
+                $question = $this->getCollectionForModel('question')->findOne(['key' => sprintf('integration-omeda-%s', $legacyId)]);
+            }
+
+            if (null === $question) {
+var_dump('still havent found the question!!!');
+die();
                 throw new \Exception(sprintf('Could not find question using "%s"', $legacyId));
             }
             $this->questions[$legacyId] = $question;
@@ -144,7 +162,13 @@ abstract class InputAnswer extends IdentityData
                 $answer = $this->getCollectionForModel('question-choice')->findOne(['alternateId' => $legacyId]);
             }
             if (null === $answer) {
+                $this->missingAnswers++;
+                var_dump($this->missingAnswers);
+                var_dump($this->missingAnswers);
+                var_dump($this->missingAnswers);
+                var_dump($this->missingAnswers);
                 throw new \Exception(sprintf('Could not find answer using "%s"', $legacyId));
+                
             }
             $this->answers[$legacyId] = $answer;
         }

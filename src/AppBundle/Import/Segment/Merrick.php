@@ -30,7 +30,7 @@ abstract class Merrick extends Segment
     {
         if (empty($items)) {
             return $items;
-        }
+        }   
         return $this->importer->getPersister()->batchInsert($this->getModelType(), $items);
     }
 
@@ -58,6 +58,14 @@ abstract class Merrick extends Segment
      */
     protected function getDocuments($limit = 200, $skip = 0)
     {
+
+        // @jpdev - use to skip ahead to speed up or if 'already loaded' error comes up    
+        /*
+        if ($skip < 111000) {
+            return [];
+        }
+        */
+
         return $this->source->retrieve($this->getCollection(), $this->getCriteria(), $this->getFields(), $this->getSort(), $limit, $skip);
     }
 

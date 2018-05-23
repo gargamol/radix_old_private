@@ -39,8 +39,13 @@ class InputAnswerPurchaseIntent extends InputAnswer
      */
     protected function formatModel(array $doc)
     {
+        //var_dump(__method__);
+        //var_dump('get question');
         $question = $this->retrieveQuestionId($this->questionKey);
+        //var_dump('got question');
+        //var_dump('get answer');
         $answer = $this->retrieveAnswerId($doc['legacy']['answers']['purchaseIntent']);
+        //var_dump('got answer');
 
         return [
             'legacy'    => [
@@ -61,6 +66,7 @@ class InputAnswerPurchaseIntent extends InputAnswer
      */
     protected function retrieveAnswerId($legacyId)
     {
+        //var_dump(__method__);
         $legacyId = (string) $legacyId;
         switch ($legacyId) {
             case 'immediately':
@@ -83,6 +89,9 @@ class InputAnswerPurchaseIntent extends InputAnswer
                 $legacyId = 'No plans. Just researching.';
                 break;
         }
+
+        //var_dump($legacyId);
+        //var_dump($this->answers);
 
         if (isset($this->answers[$legacyId])) {
             return $this->answers[$legacyId]['_id'];

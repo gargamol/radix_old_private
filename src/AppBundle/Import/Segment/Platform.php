@@ -45,7 +45,8 @@ abstract class Platform extends Segment
     public function count()
     {
         // @jp set database properly from context - done manually for merrick this way
-        $this->source->setDatabase('cygnus_ofcr_platform');
+        //$this->source->setDatabase('acbm_fl_platform');
+        $this->source->setDatabase('cygnus_fhc_platform');
 
         return $this->source->count($this->getCollection(), $this->getCriteria());
     }

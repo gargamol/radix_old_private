@@ -56,7 +56,6 @@ class IdentityOptIn extends IdentityData
      */
     protected function formatModel(array $doc)
     {
-        // $question = $this->retrieveQuestion($doc['question']);
         $integration = $this->retrieveProductIntegration($doc['question']);
 
         if (null === $integration) {
@@ -65,6 +64,7 @@ class IdentityOptIn extends IdentityData
         }
 
         $productId = $integration['product'];
+
         return [
             'legacy'    => [
                 'id'        => (string) $doc['identity']['id'],

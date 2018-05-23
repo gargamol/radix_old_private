@@ -30,6 +30,9 @@ abstract class Merrick extends Importer implements ImporterInterface
         'acbm:ooh'      => 'www.oemoffhighway.com',
         'acbm:fcp'      => 'www.forconstructionpros.com',
         'cygnus:vspc'   => 'www.vehicleservicepros.com',
+        'acbm:sdce'     => 'www.sdcexec.com',
+        'acbm:fl'       => 'www.foodlogistics.com',
+        'cygnus:fhc'    => 'www.firehouse.com',
     ];
 
     /**

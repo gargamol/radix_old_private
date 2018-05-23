@@ -76,7 +76,7 @@ class GatedDownloads extends IdentityData
         return $kvs;
     }
 
-        /**
+    /**
      * Returns formatted key-values for the passed legacy document
      *
      * @param   array   $doc    The legacy key values
@@ -105,6 +105,5 @@ class GatedDownloads extends IdentityData
         $user = $transformer->toApp($doc);
         return $this->importer->getPersister()->insert('identity-internal', $user);
     }
-
 
 }
