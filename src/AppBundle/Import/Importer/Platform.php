@@ -45,6 +45,14 @@ abstract class Platform extends Importer implements ImporterInterface
     }
 
     /**
+     *  Set source for base collections
+     */
+    public function setSourceDatabase($collection = 'platform') {
+        $dbName = sprintf('%s_%s_%s', $this->accountManager->getAccountKey(), $this->accountManager->getApplicationKey(), $collection);
+        $this->source->setDatabase($dbName);
+    }
+
+    /**
      * Returns the legacy domain for the current application context
      *
      * @return  string

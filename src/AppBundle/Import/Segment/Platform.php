@@ -29,7 +29,6 @@ abstract class Platform extends Segment
      */
     abstract protected function formatModel(array $doc);
 
-
     /**
      * Sort by default so we can resume or break into smaller bits
      *
@@ -44,10 +43,7 @@ abstract class Platform extends Segment
      */
     public function count()
     {
-        // @jp set database properly from context - done manually for merrick this way
-        //$this->source->setDatabase('acbm_fl_platform');
-        $this->source->setDatabase('cygnus_fhc_platform');
-
+        $this->importer->setSourceDatabase();
         return $this->source->count($this->getCollection(), $this->getCriteria());
     }
 
